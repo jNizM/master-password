@@ -64,14 +64,16 @@ site_key      = HMAC-SHA512 ( site_name + site_counter, master_key )
 site_password = PW-TAMPLATE ( site_key )
 ```
 
-### What differentiates the password complexity (tamplate)?
+#### What differentiates the password complexity (tamplate)?
+
 ```
 Strong -> Are all characters contained in Ascii85 (see https://en.wikipedia.org/wiki/Ascii85)
 Medium -> Are all characters contained in Base64  (see https://en.wikipedia.org/wiki/Base64)
 PIN    -> Are only numbers from 0 to 9
 ```
 
-### Password length?
+#### Password length?
+
 ```
 The password length can be set for all from 4 to 64.
 Strong -> Default = 32
