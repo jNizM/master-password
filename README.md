@@ -1,4 +1,4 @@
-# master-password
+# Master Password
 [![AHK](https://img.shields.io/badge/ahk-2.0.2-C3D69B.svg?style=flat-square)]()
 [![OS](https://img.shields.io/badge/os-windows-C3D69B.svg?style=flat-square)]()
 
@@ -7,7 +7,7 @@ Master Password is an application that never stores passwords.
 
 ## How does it work?
 
-All you need to remember is a username (e.g. your first and last name, an email address or a nickname) and a master password (which should ideally be long and complex).
+All you need to remember is a username (e.g. your first and last name, an email address or a nickname) and a master password (which should ideally be long and complex). [optional add a seed file with another secret]
 
 Then create a list of websites or applications (e.g. mail.google.com, autohotkey.com or steam) for which you want to create a password.
 
