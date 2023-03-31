@@ -51,6 +51,8 @@ MasterPassword("C:\private\secret.txt")
 
 - Make Account List optional
 
+- Show / Hide generated Password
+
 
 ## FAQ
 
@@ -69,7 +71,7 @@ Medium -> Are all characters contained in Base64  (see https://en.wikipedia.org/
 PIN    -> Are only numbers from 0 to 9
 ```
 
-### [²] Password length?
+### [³] Password length?
 ```
 The password length can be set for all from 4 to 64.
 Strong -> Default = 32
