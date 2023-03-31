@@ -5,9 +5,17 @@
 Master Password is an application that never stores passwords.
 
 
-## Features
+## How does it work?
 
-- todo
+All you need to remember is a username (e.g. your first and last name, an email address or a nickname) and a master password (which should ideally be long and complex).
+
+Then create a list of websites or applications (e.g. mail.google.com, autohotkey.com or steam) for which you want to create a password.
+
+You can decide how complex or long your password for these applications can be.
+
+Then you can copy the password (or temporarily). As soon as you close the application, everything is forgotten except for your list of applications.
+
+No passwords are stored locally or in the cloud.
 
 
 ## Screenshots
@@ -38,10 +46,12 @@ MasterPassword("C:\private\secret.txt")
 
 - Add more options
 
+- Make Account List optional
+
 
 ## FAQ
 
-#### How does it work?
+#### 1) Which algorithm is used?
 
 ```
 master_key    = PBKDF2-SHA512 (user_name, master_password (+ seed) )
