@@ -192,8 +192,10 @@ MasterPassword(Secret := "seed.txt")
 	{
 		switch GuiCtrlObj.Text
 		{
-			case Chr(10133): AddItem(ED3.Text)
-			case Chr(10134): RemoveItem(LB1.Value)
+			case Chr(10133):
+				AddItem(ED3.Text)
+			case Chr(10134):
+				RemoveItem(LB1.Value)
 		}
 	}
 
@@ -254,9 +256,12 @@ MasterPassword(Secret := "seed.txt")
 	{
 		switch GuiCtrlObj.Value
 		{
-			case 1: ED5.Text := 32
-			case 2: ED5.Text := 20
-			case 3: ED5.Text :=  4
+			case 1:
+				ED5.Text := 32
+			case 2:
+				ED5.Text := 20
+			case 3:
+				ED5.Text :=  4
 		}
 	}
 
@@ -281,9 +286,12 @@ MasterPassword(Secret := "seed.txt")
 		master_seed := ""
 		switch DL1.Value
 		{
-			case 1: ED6.Text := SubStr(Ascii85(site_key), 1, ED5.Text)
-			case 2: ED6.Text := SubStr(Base64(site_key), 1, ED5.Text)
-			case 3: ED6.Text := SubStr(Base10(site_key), 1, ED5.Text)
+			case 1:
+				ED6.Text := SubStr(Ascii85(site_key), 1, ED5.Text)
+			case 2:
+				ED6.Text := SubStr(Base64(site_key), 1, ED5.Text)
+			case 3:
+				ED6.Text := SubStr(Base10(site_key), 1, ED5.Text)
 		}
 	}
 
