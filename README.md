@@ -61,10 +61,10 @@ MasterPassword("C:\private\secret.txt")
 ```
 master_key    = PBKDF2-SHA512 (user_name, master_password (+ seed) )
 site_key      = HMAC-SHA512 ( site_name + site_counter, master_key )
-site_password = PW-TAMPLATE ( site_key )
+site_password = PW-TEMPLATE ( site_key )
 ```
 
-#### What differentiates the password complexity (tamplate)?
+#### What differentiates the password complexity (template)?
 
 ```
 Strong -> Are all characters contained in Ascii85 (see https://en.wikipedia.org/wiki/Ascii85)
