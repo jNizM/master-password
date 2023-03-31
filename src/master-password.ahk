@@ -36,10 +36,10 @@ MasterPassword()
 
 MasterPassword(Secret := "seed.txt")
 {
-    App := Map("name", "Master Password", "version", "0.0.1", "release", "2023-03-31", "author", "jNizM", "licence", "MIT")
+	App := Map("name", "Master Password", "version", "0.0.1", "release", "2023-03-31", "author", "jNizM", "licence", "MIT")
 
 
-    ; GET ACCOUNTS ============================================================================================================================================
+	; GET ACCOUNTS ============================================================================================================================================
 
 	LB_List := Array(), List_Unsorted := ""
 	if (FileExist("accounts.txt"))
@@ -57,7 +57,7 @@ MasterPassword(Secret := "seed.txt")
 	}
 
 
-    ; TRAY ====================================================================================================================================================
+	; TRAY ====================================================================================================================================================
 
 	if (VerCompare(A_OSVersion, "10.0.22000") >= 0)
 		TraySetIcon("shell32.dll", 48)
@@ -65,27 +65,27 @@ MasterPassword(Secret := "seed.txt")
 
 	; GUI =====================================================================================================================================================
 
-    Main := Gui(, App["name"])
-    Main.MarginX := 0
-    Main.MarginY := 0
+	Main := Gui(, App["name"])
+	Main.MarginX := 0
+	Main.MarginY := 0
 	Main.SetFont("s10 w400", "Segoe UI")
 
-    Main.AddText("xm+15 ym+15 w330 h23 0x200", "Name or Email address")
-    ED1 := Main.AddEdit("xm+15 y+2 w305")
-    EM_SETCUEBANNER(ED1, "eg. John Doe", True)
+	Main.AddText("xm+15 ym+15 w330 h23 0x200", "Name or Email address")
+	ED1 := Main.AddEdit("xm+15 y+2 w305")
+	EM_SETCUEBANNER(ED1, "eg. John Doe", True)
 	Main.AddCheckbox("x+7 yp h23 Checked").OnEvent("Click", ShowHidePassword)
 
-    Main.AddText("xm+15 y+17 w330 h23 0x200", "Your unique Master Password (Secret)")
-    ED2 := Main.AddEdit("xm+15 y+2 w305 +Password")
-    EM_SETCUEBANNER(ED2, "eg. autohotkey useful tool", True)
+	Main.AddText("xm+15 y+17 w330 h23 0x200", "Your unique Master Password (Secret)")
+	ED2 := Main.AddEdit("xm+15 y+2 w305 +Password")
+	EM_SETCUEBANNER(ED2, "eg. autohotkey useful tool", True)
 	Main.AddCheckbox("x+7 yp h23").OnEvent("Click", ShowHidePassword)
 
-    Main.AddText("xm+15 y+22 w330 h23 0x200", "Account(s):")
+	Main.AddText("xm+15 y+22 w330 h23 0x200", "Account(s):")
 	ED3 := Main.AddEdit("xm+15 y+2 w305")
 	ED3.OnEvent("Change", CheckAccounts)
 	BT3 := Main.AddButton("x+4 yp h23 w23 +Disabled", Chr(10133))
 	BT3.OnEvent("Click", AddRemoveItem)
-    LB1 := Main.AddListBox("xm+16 y+5 w330 r8", LB_List)
+	LB1 := Main.AddListBox("xm+16 y+5 w330 r8", LB_List)
 	LB1.OnEvent("DoubleClick", FocusItem)
 
 	Main.AddText("xm+15 y+12 w330 h23 0x200", "Site Counter")
@@ -98,15 +98,15 @@ MasterPassword(Secret := "seed.txt")
 	ED5 := Main.AddEdit("x+6 yp w162 Number")
 	Main.AddUpDown("Range4-64", 32)
 
-    Main.AddButton("xm+14 y+12 w332", "Show Password").OnEvent("Click", GeneratePassword)
+	Main.AddButton("xm+14 y+12 w332", "Show Password").OnEvent("Click", GeneratePassword)
 	ED6 := Main.AddEdit("xm+15 y+2 w330 +ReadOnly")
 
-    Main.AddButton("xm+14 y+12 w164", "Copy").OnEvent("Click", Event_Copy)
-    Main.AddButton("x+4 yp w164", "Copy Temporary").OnEvent("Click", Event_Copy)
-    PIC1 := Main.AddPicture("xm y+10 w360 h5 0x4E")
+	Main.AddButton("xm+14 y+12 w164", "Copy").OnEvent("Click", Event_Copy)
+	Main.AddButton("x+4 yp w164", "Copy Temporary").OnEvent("Click", Event_Copy)
+	PIC1 := Main.AddPicture("xm y+10 w360 h5 0x4E")
 
-    Main.OnEvent("Close", (*) => (A_Clipboard := "") && ExitApp)
-    Main.Show("AutoSize")
+	Main.OnEvent("Close", (*) => (A_Clipboard := "") && ExitApp)
+	Main.Show("AutoSize")
 
 
 	; WINDOW EVENTS ===========================================================================================================================================
@@ -139,15 +139,15 @@ MasterPassword(Secret := "seed.txt")
 	}
 
 
-    Event_Copy(GuiCtrlObj, *)
-    {
+	Event_Copy(GuiCtrlObj, *)
+	{
 		switch GuiCtrlObj.Text
 		{
 			case "Copy":
 			{
 				global StopLoop := True
 				PIC1.Move(,, 360)
-        		CreateGradient(PIC1.Hwnd, ["0x5CB85C"]*)
+				CreateGradient(PIC1.Hwnd, ["0x5CB85C"]*)
 			}
 			case "Copy Temporary":
 			{
@@ -163,7 +163,7 @@ MasterPassword(Secret := "seed.txt")
 				A_Clipboard := ""
 			}
 		}
-    }
+	}
 
 
 	CheckAccounts(GuiCtrlObj, *)
@@ -357,26 +357,26 @@ MasterPassword(Secret := "seed.txt")
 
 	; Functions ===============================================================================================================================================
 
-    CreateGradient(Handle, Colors*)
-    {
-        static IMAGE_BITMAP        := 0
-        static LR_COPYDELETEORG    := 0x00000008
-        static LR_CREATEDIBSECTION := 0x00002000
-        static STM_SETIMAGE        := 0x0172
-        global hBITMAP
-    
-        ControlGetPos(,, &OutW, &OutW, Handle)
-        Addr := Bits := Buffer(Colors.Length * 2 * 4)
-        for each, Color in Colors
-            Addr := NumPut("UInt", Color, "UInt", Color, Addr)
-    
-        hBITMAP := DllCall("gdi32\CreateBitmap", "Int", 2, "Int", Colors.Length, "UInt", 1, "UInt", 32, "Ptr", 0, "Ptr")
-        hBITMAP := DllCall("user32\CopyImage", "Ptr", hBITMAP, "UInt", IMAGE_BITMAP, "Int", 0, "Int", 0, "UInt", LR_COPYDELETEORG | LR_CREATEDIBSECTION, "Ptr")
-        DllCall("gdi32\SetBitmapBits", "Ptr", hBITMAP, "UInt", Bits.Size, "Ptr", Bits)
-        hBITMAP := DllCall("user32\CopyImage", "Ptr", hBITMAP, "UInt", 0, "Int", OutW, "Int", OutW, "UInt", LR_COPYDELETEORG | LR_CREATEDIBSECTION, "Ptr")
-        SendMessage(STM_SETIMAGE, IMAGE_BITMAP, hBitMAP, Handle)
-        return true
-    }
+	CreateGradient(Handle, Colors*)
+	{
+		static IMAGE_BITMAP        := 0
+		static LR_COPYDELETEORG    := 0x00000008
+		static LR_CREATEDIBSECTION := 0x00002000
+		static STM_SETIMAGE        := 0x0172
+		global hBITMAP
+
+		ControlGetPos(,, &OutW, &OutW, Handle)
+		Addr := Bits := Buffer(Colors.Length * 2 * 4)
+		for each, Color in Colors
+			Addr := NumPut("UInt", Color, "UInt", Color, Addr)
+
+		hBITMAP := DllCall("gdi32\CreateBitmap", "Int", 2, "Int", Colors.Length, "UInt", 1, "UInt", 32, "Ptr", 0, "Ptr")
+		hBITMAP := DllCall("user32\CopyImage", "Ptr", hBITMAP, "UInt", IMAGE_BITMAP, "Int", 0, "Int", 0, "UInt", LR_COPYDELETEORG | LR_CREATEDIBSECTION, "Ptr")
+		DllCall("gdi32\SetBitmapBits", "Ptr", hBITMAP, "UInt", Bits.Size, "Ptr", Bits)
+		hBITMAP := DllCall("user32\CopyImage", "Ptr", hBITMAP, "UInt", 0, "Int", OutW, "Int", OutW, "UInt", LR_COPYDELETEORG | LR_CREATEDIBSECTION, "Ptr")
+		SendMessage(STM_SETIMAGE, IMAGE_BITMAP, hBitMAP, Handle)
+		return true
+	}
 }
 
 
