@@ -11,7 +11,7 @@ All you need to remember is a username (e.g. your first and last name, an email 
 
 Then create a list of websites or applications (e.g. mail.google.com, autohotkey.com or steam) for which you want to create a password.
 
-You can decide how complex [²] or long [³] your password for these applications can be.
+You can decide how complex [[2](#what-differentiates-the-password-complexity-tamplate)] or long [[3](#password-length)] your password for these applications can be.
 
 Then you can copy the password (or temporarily). As soon as you close the application, everything is forgotten except for your list of applications.
 
@@ -64,14 +64,14 @@ site_key      = HMAC-SHA512 ( site_name + site_counter, master_key )
 site_password = PW-TAMPLATE ( site_key )
 ```
 
-### [²] What differentiates the password complexity (tamplate)?
+### What differentiates the password complexity (tamplate)?
 ```
 Strong -> Are all characters contained in Ascii85 (see https://en.wikipedia.org/wiki/Ascii85)
 Medium -> Are all characters contained in Base64  (see https://en.wikipedia.org/wiki/Base64)
 PIN    -> Are only numbers from 0 to 9
 ```
 
-### [³] Password length?
+### Password length?
 ```
 The password length can be set for all from 4 to 64.
 Strong -> Default = 32
