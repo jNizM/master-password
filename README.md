@@ -2,7 +2,7 @@
 [![AHK](https://img.shields.io/badge/ahk-2.0.2-C3D69B.svg?style=flat-square)]()
 [![OS](https://img.shields.io/badge/os-windows-C3D69B.svg?style=flat-square)]()
 
-Master Password is a programme that does not store passwords anywhere.
+Master Password is an application that never stores passwords.
 
 
 ## Features
