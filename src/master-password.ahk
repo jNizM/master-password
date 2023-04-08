@@ -4,7 +4,7 @@
 	Master Password (written in AutoHotkey)
 	Author ....: jNizM
 	Released ..: 2022-10-08
-	Modified ..: 2023-03-31
+	Modified ..: 2023-04-08
 	License ...: MIT
 	GitHub ....: https://github.com/jNizM/master-password
 	Forum .....: 
@@ -14,7 +14,7 @@
 ; COMPILER DIRECTIVES =========================================================================================================================================
 
 ;@Ahk2Exe-SetDescription    MasterPassword (x64)
-;@Ahk2Exe-SetFileVersion    0.0.1
+;@Ahk2Exe-SetFileVersion    0.0.2
 ;@Ahk2Exe-SetProductName    MasterPassword
 ;@Ahk2Exe-SetProductVersion 2.0
 ;@Ahk2Exe-SetCopyright      (c) 2022-2023 jNizM
@@ -36,7 +36,7 @@ MasterPassword()
 
 MasterPassword(Secret := "seed.txt")
 {
-	App := Map("name", "Master Password", "version", "0.0.1", "release", "2023-03-31", "author", "jNizM", "licence", "MIT")
+	App := Map("name", "Master Password", "version", "0.0.2", "release", "2023-03-31", "author", "jNizM", "licence", "MIT")
 
 
 	; GET ACCOUNTS ============================================================================================================================================
@@ -89,7 +89,8 @@ MasterPassword(Secret := "seed.txt")
 	LB1.OnEvent("DoubleClick", FocusItem)
 
 	Main.AddText("xm+15 y+12 w330 h23 0x200", "Site Counter")
-	ED4 := Main.AddEdit("xm+15 y+2 w330 Number", 1)
+	ED4 := Main.AddEdit("xm+15 y+2 w330 Number")
+	Main.AddUpDown("Range1-99999999", 1)
 
 	Main.AddText("xm+15 y+12 w162 h23 0x200", "Type")
 	Main.AddText("x+6 yp w162 h23 0x200", "Length")
@@ -98,8 +99,9 @@ MasterPassword(Secret := "seed.txt")
 	ED5 := Main.AddEdit("x+6 yp w162 Number")
 	Main.AddUpDown("Range4-64", 32)
 
-	Main.AddButton("xm+14 y+12 w332", "Show Password").OnEvent("Click", GeneratePassword)
-	ED6 := Main.AddEdit("xm+15 y+2 w330 +ReadOnly")
+	Main.AddButton("xm+14 y+12 w332", "Generate Password").OnEvent("Click", GeneratePassword)
+	ED6 := Main.AddEdit("xm+15 y+2 w305 +ReadOnly +Password")
+	Main.AddCheckbox("x+7 yp h23").OnEvent("Click", ShowHidePassword)
 
 	Main.AddButton("xm+14 y+12 w164", "Copy").OnEvent("Click", Event_Copy)
 	Main.AddButton("x+4 yp w164", "Copy Temporary").OnEvent("Click", Event_Copy)
@@ -135,12 +137,23 @@ MasterPassword(Secret := "seed.txt")
 						ED2.Opt("-Password")
 				}
 			}
+			case "Button5":
+			{
+				switch GuiCtrlObj.Value
+				{
+					case 0:
+						ED6.Opt("+Password")
+					case 1:
+						ED6.Opt("-Password")
+				}
+			}
 		}
 	}
 
 
 	Event_Copy(GuiCtrlObj, *)
 	{
+		A_Clipboard := ED6.Text
 		switch GuiCtrlObj.Text
 		{
 			case "Copy":
@@ -152,11 +165,11 @@ MasterPassword(Secret := "seed.txt")
 			case "Copy Temporary":
 			{
 				global StopLoop := False
-				loop 30
+				loop 20
 				{
 					if (StopLoop)
 						break
-					PIC1.Move(,, 360 - ((A_Index) * (360 / 30)))
+					PIC1.Move(,, 360 - ((A_Index) * (360 / 20)))
 					CreateGradient(PIC1.Hwnd, ["0x5CB85C"]*)
 					Sleep 1000
 				}
@@ -303,9 +316,9 @@ MasterPassword(Secret := "seed.txt")
 		Data := StrSplit(Input)
 		loop Data.length // 2
 		{
-			Value := DllCall("msvcrt\_wcstoui64", "Str", (Data[A_Index] . Data[A_Index + 1]), "Ptr", 0, "Int", 16, "cdecl Int64")
+			Value := DllCall("msvcrt\_wcstoui64", "Str", (Data[A_Index] . Data[A_Index + 1]), "Ptr", 0, "Int", 16, "Cdecl Int64")
 			VarSetStrCapacity(&Encoded, _MAX_U64TOSTR_BASE2_COUNT)
-			DllCall("msvcrt\_i64tow", "Int64", Value, "Str", Encoded, "Int", 10, "cdecl Str")
+			DllCall("msvcrt\_i64tow", "Int64", Value, "Str", Encoded, "Int", 10, "Cdecl Str")
 			Output .= Encoded
 		}
 		return Output
