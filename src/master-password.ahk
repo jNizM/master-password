@@ -14,7 +14,7 @@
 ; COMPILER DIRECTIVES =========================================================================================================================================
 
 ;@Ahk2Exe-SetDescription    MasterPassword (x64)
-;@Ahk2Exe-SetFileVersion    0.0.3
+;@Ahk2Exe-SetFileVersion    0.0.4
 ;@Ahk2Exe-SetProductName    MasterPassword
 ;@Ahk2Exe-SetProductVersion 2.0
 ;@Ahk2Exe-SetCopyright      (c) 2022-2023 jNizM
@@ -36,7 +36,7 @@ MasterPassword()
 
 MasterPassword(Secret := "seed.txt")
 {
-	App := Map("name", "Master Password", "version", "0.0.3", "release", "2023-04-08", "author", "jNizM", "licence", "MIT")
+	App := Map("name", "Master Password", "version", "0.0.4", "release", "2023-04-08", "author", "jNizM", "licence", "MIT")
 
 
 	; GET ACCOUNTS ============================================================================================================================================
@@ -87,6 +87,7 @@ MasterPassword(Secret := "seed.txt")
 	BT3.OnEvent("Click", AddRemoveItem)
 	LB1 := Main.AddListBox("xm+16 y+5 w330 r8", LB_List)
 	LB1.OnEvent("DoubleClick", FocusItem)
+	LB1.OnEvent("ContextMenu", LB1_ContextMenu)
 
 	Main.AddText("xm+15 y+12 w330 h23 0x200", "Site Counter")
 	ED4 := Main.AddEdit("xm+15 y+2 w330 Number")
@@ -219,6 +220,22 @@ MasterPassword(Secret := "seed.txt")
 		ED3.Text := GuiCtrlObj.Text
 		ControlSetText Chr(10134), BT3.Hwnd
 		BT3.Opt("-Disabled")
+	}
+
+
+	LB1_ContextMenu(LB1, Item, IsRightClick, X, Y)
+	{
+		if (ControlGetItems(LB1.Hwnd).Length > 0) && (LB1.Value != 0)
+		{
+			LB_Menu := Menu()
+			LB_Menu.Add("Remove", LB_Remove)
+			LB_Menu.Show(X, Y)
+		}
+
+		LB_Remove(*)
+		{
+			RemoveItem(LB1.Value)
+		}
 	}
 
 
@@ -419,10 +436,10 @@ MasterPassword(Secret := "seed.txt")
 			if (wParam = SET_HIDEFOCUS)
 				Affected[hWnd] := true
 			else if (Affected.Has(hWnd))
-				PostMessage(WM_UPDATEUISTATE, SET_HIDEFOCUS, 0,, "ahk_id " hWnd)
+				PostMessage(WM_UPDATEUISTATE, SET_HIDEFOCUS, 0, hWnd)
 		}
 		else if (DllCall("user32\IsWindow", "Ptr", wParam, "UInt"))
-			PostMessage(WM_UPDATEUISTATE, SET_HIDEFOCUS, 0,, "ahk_id " wParam)
+			PostMessage(WM_UPDATEUISTATE, SET_HIDEFOCUS, 0, wParam)
 	}
 }
 
