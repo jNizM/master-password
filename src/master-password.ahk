@@ -7,7 +7,7 @@
 	Modified ..: 2023-04-08
 	License ...: MIT
 	GitHub ....: https://github.com/jNizM/master-password
-	Forum .....: 
+	Forum .....: https://www.autohotkey.com/boards/viewtopic.php?t=115925
 */
 
 

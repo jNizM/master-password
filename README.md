@@ -83,6 +83,10 @@ PIN    -> Default =  4
 ```
 
 
+## Questions / Bugs / Issues
+If you notice any kind of bugs or issues, report them on the [AHK Thread](https://www.autohotkey.com/boards/viewtopic.php?t=115925). Same for any kind of questions.
+
+
 ## Copyright and License
 [![MIT License](https://img.shields.io/github/license/jNizM/master-password.svg?style=flat-square&color=C3D69B)](LICENSE)
 

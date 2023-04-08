@@ -1,0 +1,71 @@
+[b][size=170][color=#FB6601]Master Password[/color][/size][/b]
+Master Password is an application that never stores passwords.
+
+
+[b][size=150]Source[/size][/b]
+[hr][/hr][url=https://github.com/jNizM/master-password]Master Password[/url] (GitHub)
+
+
+[b][size=150]Download[/size][/b] (precompiled executable)
+[hr][/hr]coming soon
+
+
+[b][size=150]Screenshot[/size][/b]
+[hr][/hr][img]https://raw.githubusercontent.com/jNizM/master-password/main/img/MasterPassword.png[/img]
+
+
+[b][size=150]How does it work?[/size][/b]
+[hr][/hr]All you need to remember is a username (e.g. your first and last name, an email address or a nickname) and a master password (which should ideally be long and complex). [optional add a seed file with another secret]
+
+Then create a list of websites or applications (e.g. mail.google.com, autohotkey.com or steam) for which you want to create a password.
+
+You can decide how complex [²] or long [³] your password for these applications can be.
+
+Then you can copy the password (or temporarily). As soon as you close the application, everything is forgotten except for your list of applications.
+
+No passwords are stored locally or in the cloud.
+
+ :!: However, if you forget your username, master password or the optional seed list, you will no longer be able to generate the same passwords.
+
+
+[b][size=150]Usage/Examples[/size][/b]
+[hr][/hr]To start it, simply call the function MasterPassword()
+[code]MasterPassword()
+MasterPassword(, True) ; for DarkMode[/code]
+
+To start the programme with extra protection (seed), specify a path to a file or place a file with the name seed.txt (default) in the same folder
+[code]; checks whether a file with the name 'seed.txt' exists in the same folder.
+MsterPassword()
+
+; uses the file 'C:\private\secret.txt' as seed
+MasterPassword("C:\private\secret.txt")[/code]
+
+
+[b][size=150]FAQ[/size][/b]
+[hr][/hr][b]Which algorithm is used?[/b]
+[code]master_key    = PBKDF2-SHA512 (user_name, master_password (+ seed) )
+site_key      = HMAC-SHA512 ( site_name + site_counter, master_key )
+site_password = PW-TEMPLATE ( site_key )[/code]
+
+[b]What differentiates the password complexity (template)?[/b]
+[code]Strong -> Are all characters contained in Ascii85 (see https://en.wikipedia.org/wiki/Ascii85)
+Medium -> Are all characters contained in Base64  (see https://en.wikipedia.org/wiki/Base64)
+PIN    -> Are only numbers from 0 to 9[/code]
+
+[b]Password length?[/b]
+[code]The password length can be set for all from 4 to 64.
+Strong -> Default = 32
+Medium -> Default = 20
+PIN    -> Default =  4[/code]
+
+
+[b][size=150]Test environment[/size][/b]
+[hr][/hr][img]https://img.shields.io/badge/ahk-2.0.2-C3D69B.svg?style=flat-square[/img] [img]https://img.shields.io/badge/os-windows-C3D69B.svg?style=flat-square[/img]
+
+
+[b][size=150]Questions / Bugs / Issues[/size][/b]
+[hr][/hr]If you notice any kind of bugs or issues, report them here. Same for any kind of questions.
+
+
+[b][size=150]Copyright and License[/size][/b]
+[hr][/hr][url=https://opensource.org/licenses/MIT][img]https://img.shields.io/github/license/jNizM/password-generator.svg?style=flat-square&color=C3D69B[/img][/url]
