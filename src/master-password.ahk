@@ -14,7 +14,7 @@
 ; COMPILER DIRECTIVES =========================================================================================================================================
 
 ;@Ahk2Exe-SetDescription    MasterPassword (x64)
-;@Ahk2Exe-SetFileVersion    0.0.4
+;@Ahk2Exe-SetFileVersion    0.1.0
 ;@Ahk2Exe-SetProductName    MasterPassword
 ;@Ahk2Exe-SetProductVersion 2.0
 ;@Ahk2Exe-SetCopyright      (c) 2022-2023 jNizM
@@ -29,14 +29,15 @@
 ; RUN =========================================================================================================================================================
 
 
-MasterPassword()
+;MasterPassword()
+MasterPassword(, True)
 
 
 ; MasterPassword ==============================================================================================================================================
 
-MasterPassword(Secret := "seed.txt")
+MasterPassword(Secret := "seed.txt", DarkMode := False)
 {
-	App := Map("name", "Master Password", "version", "0.0.4", "release", "2023-04-08", "author", "jNizM", "licence", "MIT")
+	App := Map("name", "Master Password", "version", "0.1.0", "release", "2023-04-08", "author", "jNizM", "licence", "MIT")
 
 
 	; GET ACCOUNTS ============================================================================================================================================
@@ -66,42 +67,76 @@ MasterPassword(Secret := "seed.txt")
 	; GUI =====================================================================================================================================================
 
 	Main := Gui(, App["name"])
+
+	if (DarkMode)
+	{
+		DarkModeBackground := "0x202020"
+		DarkModeFontColor  := "c0xE0E0E0"
+		DarkModeCtrlColor  := "Background404040"
+
+		if (VerCompare(A_OSVersion, "10.0.17763") >= 0)
+		{
+			DWMWA_USE_IMMERSIVE_DARK_MODE := 19
+			if (VerCompare(A_OSVersion, "10.0.18985") >= 0)
+			{
+				DWMWA_USE_IMMERSIVE_DARK_MODE := 20
+			}
+			DllCall("dwmapi\DwmSetWindowAttribute", "Ptr", Main.hWnd, "Int", DWMWA_USE_IMMERSIVE_DARK_MODE, "Int*", True, "Int", 4)
+			uxtheme := DllCall("GetModuleHandle", "Str", "uxtheme", "Ptr")
+			DllCall(DllCall("GetProcAddress", "Ptr", uxtheme, "Ptr", 135, "Ptr"), "Int", 2) ; SetPreferredAppMode + ForceDark
+			DllCall(DllCall("GetProcAddress", "Ptr", uxtheme, "Ptr", 136, "Ptr")) ; FlushMenuThemes
+		}
+		OnMessage(0x0135, WM_CTLCOLORBTN)
+
+		Main.BackColor := DarkModeBackground
+	}
+
+	GuiThemeFontColor := (DarkMode ? DarkModeFontColor : "")
+	GuiThemeCtrlColor := (DarkMode ? DarkModeCtrlColor " " GuiThemeFontColor : "")
+
 	Main.MarginX := 0
 	Main.MarginY := 0
 	Main.SetFont("s10 w400", "Segoe UI")
 
-	Main.AddText("xm+15 ym+15 w330 h23 0x200", "Name or Email address")
+	Main.AddText("xm+15 ym+15 w330 h23 0x200", "Name or Email address").Opt(GuiThemeFontColor)
 	ED1 := Main.AddEdit("xm+15 y+2 w305")
+	ED1.Opt(GuiThemeCtrlColor)
 	EM_SETCUEBANNER(ED1, "eg. John Doe", True)
 	Main.AddCheckbox("x+7 yp h23 Checked").OnEvent("Click", ShowHidePassword)
 
-	Main.AddText("xm+15 y+17 w330 h23 0x200", "Your unique Master Password (Secret)")
+	Main.AddText("xm+15 y+17 w330 h23 0x200", "Your unique Master Password (Secret)").Opt(GuiThemeFontColor)
 	ED2 := Main.AddEdit("xm+15 y+2 w305 +Password")
+	ED2.Opt(GuiThemeCtrlColor)
 	EM_SETCUEBANNER(ED2, "eg. autohotkey useful tool", True)
 	Main.AddCheckbox("x+7 yp h23").OnEvent("Click", ShowHidePassword)
 
-	Main.AddText("xm+15 y+22 w330 h23 0x200", "Account(s):")
+	Main.AddText("xm+15 y+22 w330 h23 0x200", "Account(s):").Opt(GuiThemeFontColor)
 	ED3 := Main.AddEdit("xm+15 y+2 w305")
+	ED3.Opt(GuiThemeCtrlColor)
 	ED3.OnEvent("Change", CheckAccounts)
 	BT3 := Main.AddButton("x+4 yp h23 w23 +Disabled", Chr(10133))
 	BT3.OnEvent("Click", AddRemoveItem)
 	LB1 := Main.AddListBox("xm+16 y+5 w330 r8", LB_List)
+	LB1.Opt(GuiThemeCtrlColor)
 	LB1.OnEvent("DoubleClick", FocusItem)
 	LB1.OnEvent("ContextMenu", LB1_ContextMenu)
 
-	Main.AddText("xm+15 y+12 w330 h23 0x200", "Site Counter")
+	Main.AddText("xm+15 y+12 w330 h23 0x200", "Site Counter").Opt(GuiThemeFontColor)
 	ED4 := Main.AddEdit("xm+15 y+2 w330 Number")
+	ED4.Opt(GuiThemeCtrlColor)
 	Main.AddUpDown("Range1-99999999", 1)
 
-	Main.AddText("xm+15 y+12 w162 h23 0x200", "Type")
-	Main.AddText("x+6 yp w162 h23 0x200", "Length")
+	Main.AddText("xm+15 y+12 w162 h23 0x200", "Type").Opt(GuiThemeFontColor)
+	Main.AddText("x+6 yp w162 h23 0x200", "Length").Opt(GuiThemeFontColor)
 	DL1 := Main.AddDropDownList("xm+15 y+2 w162 Choose1", ["Strong", "Medium", "PIN"])
 	DL1.OnEvent("Change", ChangePasswordType)
 	ED5 := Main.AddEdit("x+6 yp w162 Number")
+	ED5.Opt(GuiThemeCtrlColor)
 	Main.AddUpDown("Range4-64", 32)
 
 	Main.AddButton("xm+14 y+12 w332", "Generate Password").OnEvent("Click", GeneratePassword)
 	ED6 := Main.AddEdit("xm+15 y+2 w305 +ReadOnly +Password")
+	ED6.Opt(GuiThemeCtrlColor)
 	Main.AddCheckbox("x+7 yp h23").OnEvent("Click", ShowHidePassword)
 
 	Main.AddButton("xm+14 y+12 w164", "Copy").OnEvent("Click", Event_Copy)
@@ -109,6 +144,21 @@ MasterPassword(Secret := "seed.txt")
 	PIC1 := Main.AddPicture("xm y+10 w360 h5 0x4E")
 
 	Main.OnEvent("Close", (*) => (A_Clipboard := "") && ExitApp)
+
+	if (DarkMode)
+	{
+		for hWnd, GuiCtrlObj in Main
+		{
+			if (GuiCtrlObj.Type = "Button")
+			|| (GuiCtrlObj.Type = "Checkbox")
+			|| (GuiCtrlObj.Type = "ListBox")
+			|| (GuiCtrlObj.Type = "UpDown")
+			{
+				DllCall("uxtheme\SetWindowTheme", "Ptr", GuiCtrlObj.hWnd, "Str", "DarkMode_Explorer", "Ptr", 0)
+			}
+		}
+	}
+
 	Main.Show("AutoSize")
 	HideFocusBorder(Main.Hwnd)
 
@@ -419,6 +469,16 @@ MasterPassword(Secret := "seed.txt")
 		hBITMAP := DllCall("user32\CopyImage", "Ptr", hBITMAP, "UInt", 0, "Int", OutW, "Int", OutW, "UInt", LR_COPYDELETEORG | LR_CREATEDIBSECTION, "Ptr")
 		SendMessage(STM_SETIMAGE, IMAGE_BITMAP, hBitMAP, Handle)
 		return true
+	}
+
+
+	WM_CTLCOLORBTN(hDC, *)
+	{
+		static DC_BRUSH := 18
+		static hGDIOBJ  := DllCall("gdi32\GetStockObject", "Int", DC_BRUSH, "Ptr")
+
+		DllCall("gdi32\SetDCBrushColor", "Ptr", hDC, "UInt", DarkModeBackground, "UInt")
+		return hGDIOBJ
 	}
 
 

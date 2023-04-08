@@ -31,6 +31,7 @@ No passwords are stored locally or in the cloud.
 To start it, simply call the function MasterPassword()
 ```autohotkey
 MasterPassword()
+MasterPassword(, True) ; for DarkMode
 ```
 
 To start the programme with extra protection (seed), specify a path to a file or place a file with the name seed.txt (default) in the same folder
