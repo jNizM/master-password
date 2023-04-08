@@ -14,7 +14,7 @@
 ; COMPILER DIRECTIVES =========================================================================================================================================
 
 ;@Ahk2Exe-SetDescription    MasterPassword (x64)
-;@Ahk2Exe-SetFileVersion    0.0.2
+;@Ahk2Exe-SetFileVersion    0.0.3
 ;@Ahk2Exe-SetProductName    MasterPassword
 ;@Ahk2Exe-SetProductVersion 2.0
 ;@Ahk2Exe-SetCopyright      (c) 2022-2023 jNizM
@@ -36,7 +36,7 @@ MasterPassword()
 
 MasterPassword(Secret := "seed.txt")
 {
-	App := Map("name", "Master Password", "version", "0.0.2", "release", "2023-03-31", "author", "jNizM", "licence", "MIT")
+	App := Map("name", "Master Password", "version", "0.0.3", "release", "2023-04-08", "author", "jNizM", "licence", "MIT")
 
 
 	; GET ACCOUNTS ============================================================================================================================================
@@ -109,6 +109,7 @@ MasterPassword(Secret := "seed.txt")
 
 	Main.OnEvent("Close", (*) => (A_Clipboard := "") && ExitApp)
 	Main.Show("AutoSize")
+	HideFocusBorder(Main.Hwnd)
 
 
 	; WINDOW EVENTS ===========================================================================================================================================
@@ -246,6 +247,8 @@ MasterPassword(Secret := "seed.txt")
 		LB1.Delete()
 		LB1.Add(LB_List)
 		LB1.Opt("+Redraw")
+		ED3.Text := ""
+		ED3.Focus()
 		CheckAccounts(ED3)
 	}
 
@@ -261,6 +264,8 @@ MasterPassword(Secret := "seed.txt")
 			FileAppend LB_List[A_Index] (LB_List.Length = A_Index ? "" : "`n"), "accounts.txt"
 		}
 		LB1.Opt("+Redraw")
+		ED3.Text := ""
+		ED3.Focus()
 		CheckAccounts(ED3)
 	}
 
@@ -397,6 +402,27 @@ MasterPassword(Secret := "seed.txt")
 		hBITMAP := DllCall("user32\CopyImage", "Ptr", hBITMAP, "UInt", 0, "Int", OutW, "Int", OutW, "UInt", LR_COPYDELETEORG | LR_CREATEDIBSECTION, "Ptr")
 		SendMessage(STM_SETIMAGE, IMAGE_BITMAP, hBitMAP, Handle)
 		return true
+	}
+
+
+	HideFocusBorder(wParam, lParam := "", Msg := "", hWnd := "")
+	{
+		static Affected         := Map()
+		static WM_UPDATEUISTATE := 0x0128
+		static UIS_SET          := 1
+		static UISF_HIDEFOCUS   := 0x1
+		static SET_HIDEFOCUS    := UIS_SET << 16 | UISF_HIDEFOCUS
+		static init             := OnMessage(WM_UPDATEUISTATE, HideFocusBorder)
+
+		if (Msg = WM_UPDATEUISTATE)
+		{
+			if (wParam = SET_HIDEFOCUS)
+				Affected[hWnd] := true
+			else if (Affected.Has(hWnd))
+				PostMessage(WM_UPDATEUISTATE, SET_HIDEFOCUS, 0,, "ahk_id " hWnd)
+		}
+		else if (DllCall("user32\IsWindow", "Ptr", wParam, "UInt"))
+			PostMessage(WM_UPDATEUISTATE, SET_HIDEFOCUS, 0,, "ahk_id " wParam)
 	}
 }
 
