@@ -4,7 +4,7 @@
 	Master Password (written in AutoHotkey)
 	Author ....: jNizM
 	Released ..: 2022-10-08
-	Modified ..: 2023-04-08
+	Modified ..: 2023-04-09
 	License ...: MIT
 	GitHub ....: https://github.com/jNizM/master-password
 	Forum .....: https://www.autohotkey.com/boards/viewtopic.php?t=115925
@@ -14,7 +14,7 @@
 ; COMPILER DIRECTIVES =========================================================================================================================================
 
 ;@Ahk2Exe-SetDescription    MasterPassword (x64)
-;@Ahk2Exe-SetFileVersion    0.1.1
+;@Ahk2Exe-SetFileVersion    0.1.2
 ;@Ahk2Exe-SetProductName    MasterPassword
 ;@Ahk2Exe-SetProductVersion 2.0
 ;@Ahk2Exe-SetCopyright      (c) 2022-2023 jNizM
@@ -37,7 +37,7 @@ MasterPassword(, True)
 
 MasterPassword(Secret := "seed.txt", DarkMode := False)
 {
-	App := Map("name", "Master Password", "version", "0.1.1", "release", "2023-04-08", "author", "jNizM", "licence", "MIT")
+	App := Map("name", "Master Password", "version", "0.1.2", "release", "2023-04-09", "author", "jNizM", "licence", "MIT")
 
 
 	; GET ACCOUNTS ============================================================================================================================================
@@ -71,7 +71,7 @@ MasterPassword(Secret := "seed.txt", DarkMode := False)
 	if (DarkMode)
 	{
 		DarkColors := Map("Background", "0x202020", "Controls", "0x404040", "Font", "0xE0E0E0")
-		TextBackgroundBrush := DllCall("CreateSolidBrush", "UInt", DarkColors["Background"])
+		TextBackgroundBrush := DllCall("gdi32\CreateSolidBrush", "UInt", DarkColors["Background"], "Ptr")
 
 		if (VerCompare(A_OSVersion, "10.0.17763") >= 0)
 		{
@@ -81,9 +81,9 @@ MasterPassword(Secret := "seed.txt", DarkMode := False)
 				DWMWA_USE_IMMERSIVE_DARK_MODE := 20
 			}
 			DllCall("dwmapi\DwmSetWindowAttribute", "Ptr", Main.hWnd, "Int", DWMWA_USE_IMMERSIVE_DARK_MODE, "Int*", True, "Int", 4)
-			uxtheme := DllCall("GetModuleHandle", "Str", "uxtheme", "Ptr")
-			DllCall(DllCall("GetProcAddress", "Ptr", uxtheme, "Ptr", 135, "Ptr"), "Int", 2) ; SetPreferredAppMode + ForceDark
-			DllCall(DllCall("GetProcAddress", "Ptr", uxtheme, "Ptr", 136, "Ptr")) ; FlushMenuThemes
+			uxtheme := DllCall("kernel32\GetModuleHandle", "Str", "uxtheme", "Ptr")
+			DllCall(DllCall("kernel32\GetProcAddress", "Ptr", uxtheme, "Ptr", 135, "Ptr"), "Int", 2) ; SetPreferredAppMode + ForceDark
+			DllCall(DllCall("kernel32\GetProcAddress", "Ptr", uxtheme, "Ptr", 136, "Ptr")) ; FlushMenuThemes
 		}
 
 		Main.BackColor := DarkColors["Background"]
@@ -140,30 +140,30 @@ MasterPassword(Secret := "seed.txt", DarkMode := False)
 	{
 		for hWnd, GuiCtrlObj in Main
 		{
-			if (GuiCtrlObj.Type = "Button")
-			|| (GuiCtrlObj.Type = "Checkbox")
-			|| (GuiCtrlObj.Type = "ListBox")
-			|| (GuiCtrlObj.Type = "UpDown")
+			switch GuiCtrlObj.Type
 			{
-				DllCall("uxtheme\SetWindowTheme", "Ptr", GuiCtrlObj.hWnd, "Str", "DarkMode_Explorer", "Ptr", 0)
-			}
-			if (GuiCtrlObj.Type = "DDL") ||  (GuiCtrlObj.Type = "Combobox")
-			{
-				DllCall("uxtheme\SetWindowTheme", "Ptr", GuiCtrlObj.hWnd, "Str", "DarkMode_CFD", "Ptr", 0)
-			}
-			if (GuiCtrlObj.Type = "Edit")
-			{
-				static GWL_STYLE    := -16
-				static ES_MULTILINE := 0x0004
-
-				GetWindowLong := A_PtrSize = 8 ? "GetWindowLongPtr" : "GetWindowLong"
-				if (DllCall(GetWindowLong, "Ptr", GuiCtrlObj.hWnd, "Int", GWL_STYLE) & ES_MULTILINE)
+				case "Button", "ListBox", "UpDown":
 				{
 					DllCall("uxtheme\SetWindowTheme", "Ptr", GuiCtrlObj.hWnd, "Str", "DarkMode_Explorer", "Ptr", 0)
 				}
-				else
+				case "DDL":
 				{
 					DllCall("uxtheme\SetWindowTheme", "Ptr", GuiCtrlObj.hWnd, "Str", "DarkMode_CFD", "Ptr", 0)
+				}
+				case "Edit":
+				{
+					static GWL_STYLE    := -16
+					static ES_MULTILINE := 0x0004
+
+					GetWindowLong := A_PtrSize = 8 ? "GetWindowLongPtr" : "GetWindowLong"
+					if (DllCall("user32\" GetWindowLong, "Ptr", GuiCtrlObj.hWnd, "Int", GWL_STYLE) & ES_MULTILINE)
+					{
+						DllCall("uxtheme\SetWindowTheme", "Ptr", GuiCtrlObj.hWnd, "Str", "DarkMode_Explorer", "Ptr", 0)
+					}
+					else
+					{
+						DllCall("uxtheme\SetWindowTheme", "Ptr", GuiCtrlObj.hWnd, "Str", "DarkMode_CFD", "Ptr", 0)
+					}
 				}
 			}
 		}
@@ -171,7 +171,7 @@ MasterPassword(Secret := "seed.txt", DarkMode := False)
 		; https://www.autohotkey.com/docs/v2/lib/CallbackCreate.htm#ExSubclassGUI
 		SetWindowLong := A_PtrSize = 8 ? "SetWindowLongPtr" : "SetWindowLong"
 		WindowProcNew := CallbackCreate(WindowProc)  ; Avoid fast-mode for subclassing.
-		WindowProcOld := DllCall(SetWindowLong, "Ptr", Main.Hwnd, "Int", -4, "Ptr", WindowProcNew, "Ptr")  ; -4 is GWL_WNDPROC
+		WindowProcOld := DllCall("user32\" SetWindowLong, "Ptr", Main.Hwnd, "Int", -4, "Ptr", WindowProcNew, "Ptr")  ; -4 is GWL_WNDPROC
 	}
 
 	Main.Show("AutoSize")
@@ -517,7 +517,7 @@ MasterPassword(Secret := "seed.txt", DarkMode := False)
 				return TextBackgroundBrush
 			}
 		}
-		return DllCall("CallWindowProc", "Ptr", WindowProcOld, "Ptr", hwnd, "UInt", uMsg, "Ptr", wParam, "Ptr", lParam)
+		return DllCall("user32\CallWindowProc", "Ptr", WindowProcOld, "Ptr", hwnd, "UInt", uMsg, "Ptr", wParam, "Ptr", lParam)
 	}
 
 
