@@ -142,7 +142,7 @@ MasterPassword(Secret := "seed.txt", DarkMode := False)
 		{
 			switch GuiCtrlObj.Type
 			{
-				case "Button", "ListBox", "UpDown":
+				case "Button", "CheckBox", "ListBox", "UpDown":
 				{
 					DllCall("uxtheme\SetWindowTheme", "Ptr", GuiCtrlObj.hWnd, "Str", "DarkMode_Explorer", "Ptr", 0)
 				}
