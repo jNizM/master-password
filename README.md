@@ -11,7 +11,7 @@ All you need to remember is a username (e.g. your first and last name, an email 
 
 Then create a list of websites or applications (e.g. mail.google.com, autohotkey.com or steam) for which you want to create a password.
 
-You can decide how complex [[2](#what-differentiates-the-password-complexity-tamplate)] or long [[3](#password-length)] your password for these applications can be.
+You can decide how complex [[2](#what-differentiates-the-password-complexity-template)] or long [[3](#password-length)] your password for these applications can be.
 
 Then you can copy the password (or temporarily). As soon as you close the application, everything is forgotten except for your list of applications.
 
