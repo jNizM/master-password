@@ -4,7 +4,7 @@
 	Master Password (written in AutoHotkey)
 	Author ....: jNizM
 	Released ..: 2022-10-08
-	Modified ..: 2023-04-09
+	Modified ..: 2023-09-01
 	License ...: MIT
 	GitHub ....: https://github.com/jNizM/master-password
 	Forum .....: https://www.autohotkey.com/boards/viewtopic.php?t=115925
@@ -14,7 +14,7 @@
 ; COMPILER DIRECTIVES =========================================================================================================================================
 
 ;@Ahk2Exe-SetDescription    MasterPassword (x64)
-;@Ahk2Exe-SetFileVersion    0.1.2
+;@Ahk2Exe-SetFileVersion    0.1.3
 ;@Ahk2Exe-SetProductName    MasterPassword
 ;@Ahk2Exe-SetProductVersion 2.0
 ;@Ahk2Exe-SetCopyright      (c) 2022-2023 jNizM
@@ -37,7 +37,7 @@ MasterPassword(, True)
 
 MasterPassword(Secret := "seed.txt", DarkMode := False)
 {
-	App := Map("name", "Master Password", "version", "0.1.2", "release", "2023-04-09", "author", "jNizM", "licence", "MIT")
+	App := Map("name", "Master Password", "version", "0.1.3", "release", "2023-09-01", "author", "jNizM", "licence", "MIT")
 
 
 	; GET ACCOUNTS ============================================================================================================================================
@@ -98,17 +98,17 @@ MasterPassword(Secret := "seed.txt", DarkMode := False)
 	Main.AddText("xm+15 ym+15 w330 h23 0x200", "Name or Email address")
 	ED1 := Main.AddEdit("xm+15 y+2 w305")
 	EM_SETCUEBANNER(ED1, "eg. John Doe", True)
-	Main.AddCheckbox("x+7 yp h23 Checked").OnEvent("Click", ShowHidePassword)
+	Main.AddCheckbox("x+7 yp h23 Checked -Tabstop").OnEvent("Click", ShowHidePassword)
 
 	Main.AddText("xm+15 y+17 w330 h23 0x200", "Your unique Master Password (Secret)")
 	ED2 := Main.AddEdit("xm+15 y+2 w305 +Password")
 	EM_SETCUEBANNER(ED2, "eg. autohotkey useful tool", True)
-	Main.AddCheckbox("x+7 yp h23").OnEvent("Click", ShowHidePassword)
+	Main.AddCheckbox("x+7 yp h23 -Tabstop").OnEvent("Click", ShowHidePassword)
 
 	Main.AddText("xm+15 y+22 w330 h23 0x200", "Account(s):")
 	ED3 := Main.AddEdit("xm+15 y+2 w305")
 	ED3.OnEvent("Change", CheckAccounts)
-	BT3 := Main.AddButton("x+4 yp h23 w23 +Disabled", Chr(10133))
+	BT3 := Main.AddButton("x+4 yp h23 w23 +Disabled -Tabstop", Chr(10133))
 	BT3.OnEvent("Click", AddRemoveItem)
 	LB1 := Main.AddListBox("xm+16 y+5 w330 r8", LB_List)
 	LB1.Opt(GuiThemeCtrlColor)
@@ -128,7 +128,7 @@ MasterPassword(Secret := "seed.txt", DarkMode := False)
 
 	Main.AddButton("xm+14 y+12 w332", "Generate Password").OnEvent("Click", GeneratePassword)
 	ED6 := Main.AddEdit("xm+15 y+2 w305 +ReadOnly +Password")
-	Main.AddCheckbox("x+7 yp h23").OnEvent("Click", ShowHidePassword)
+	Main.AddCheckbox("x+7 yp h23 -Tabstop").OnEvent("Click", ShowHidePassword)
 
 	Main.AddButton("xm+14 y+12 w164", "Copy").OnEvent("Click", Event_Copy)
 	Main.AddButton("x+4 yp w164", "Copy Temporary").OnEvent("Click", Event_Copy)
