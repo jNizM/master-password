@@ -14,7 +14,7 @@
 ; COMPILER DIRECTIVES =========================================================================================================================================
 
 ;@Ahk2Exe-SetDescription    MasterPassword (x64)
-;@Ahk2Exe-SetFileVersion    0.1.3
+;@Ahk2Exe-SetFileVersion    0.1.4
 ;@Ahk2Exe-SetProductName    MasterPassword
 ;@Ahk2Exe-SetProductVersion 2.0
 ;@Ahk2Exe-SetCopyright      (c) 2022-2023 jNizM
@@ -37,7 +37,7 @@ MasterPassword(, True)
 
 MasterPassword(Secret := "seed.txt", DarkMode := False)
 {
-	App := Map("name", "Master Password", "version", "0.1.3", "release", "2023-09-01", "author", "jNizM", "licence", "MIT")
+	App := Map("name", "Master Password", "version", "0.1.4", "release", "2023-09-01", "author", "jNizM", "licence", "MIT")
 
 
 	; GET ACCOUNTS ============================================================================================================================================
@@ -60,7 +60,7 @@ MasterPassword(Secret := "seed.txt", DarkMode := False)
 
 	; TRAY ====================================================================================================================================================
 
-	if (VerCompare(A_OSVersion, "10.0.22000") >= 0)
+	if (VerCompare(A_OSVersion, "10.0.18985") >= 0)
 		TraySetIcon("shell32.dll", 48)
 
 
